@@ -26,7 +26,7 @@ Evolution didn't add *more cell*. It added **internal organization**.
 
 ---
 
-## Roadmap — ten acts
+## Roadmap — eleven acts
 
 | Act | Question | Biology |
 |-----|----------|---------|
@@ -39,7 +39,8 @@ Evolution didn't add *more cell*. It added **internal organization**.
 | 7 | Readable, agile codebases; skills; the code judge | The **habitat & its immune system** |
 | 8 | How do agents improve themselves while "asleep"? | **Dreaming** |
 | 9 | Long jobs, always-on agents, OpenClaw & the axiom stack | **Hibernation & the leash** |
-| 10 | Llull's *Ars generalis* → today's agent specs | The **art of combining ideas** |
+| 10 | moonshotHiggs: the Higgs as the agent's gym | **The home turf** |
+| 11 | Llull's *Ars generalis* → today's agent specs | The **art of combining ideas** |
 
 ---
 
@@ -987,7 +988,64 @@ it triggers a real-world action.
 
 ---
 
-## Act 10 · **Ramon Llull, Prototype Systems Engineer**
+## Act 10 · **moonshotHiggs: The Higgs as Your Gym**
+
+---
+
+## The moonshotHiggs twist: the Higgs as your gym
+
+This program runs at the **Higgs factory** — so the organism trains on
+Higgs physics, not toy tasks. Companion repo:
+`github.com/uzzielperez/moonshotHiggs` (*RAG AI Scientist*, with an
+ATLAS Higgs-challenge replication testbed).
+
+Why the Higgs is the *perfect* lab animal:
+
+- `σ(E) = A/E²` becomes **AMS** — the ATLAS challenge metric, a real
+  deterministic oracle with a regulator (`b_r = 10`)
+- the 2014 challenge data: 11 million events, sentinel `-999 → NaN`,
+  weighted training — **real mess, real spine required**
+- the discovery itself is the story arc: a 5σ bump **was** an agent
+  (the experiment) dreaming in data until the signal survived every cut
+
+---
+
+## moonshotHiggs gives the deck its organs pre-built
+
+| Deck organ | moonshotHiggs implementation |
+|------------|------------------------------|
+| spine (deterministic judge) | **OGTS** — 50 micro-tasks, oracles check generated code numerically |
+| judge of done | oracle score = 1.0, not "looks reasonable" |
+| memory (semantic) | RAG store with **published failure cases** — the index admits what it missed |
+| dreaming / tree search | **OGTS vs linear retry** — the night shift with a budget: depth × branches |
+| habitat | `configs/references.yaml`, `evals/`, provenance files — legible by design |
+| honesty box | scope & non-claims in the README: corpus-specific metrics, no leaderboard claims |
+
+> The paper's thesis is this deck's thesis: generated code is a **proposal**;
+> the oracle is the **spine**; retrieval that can say "I missed" is a **sense organ**.
+
+---
+
+## The lab, Higgs-flavored (same four tags, new prey)
+
+```
+v1-amoeba     vibe-fit the Higgs background — no weights, -999 as a real number
+v2-nerve-net  data / features / train / AMS handlers — still amnesic
+v3-head       weighted loss + sentinel handling + AMS verify + results.json
+v4-cns        OGTS-style: budgeted tree search over fixes, oracle as judge
+```
+
+- **OGTS is dreaming with a budget**: `d` depths × `b` branches = the
+  night shift, scored by oracles instead of vibes.
+- Every improvement still lands as a **diff** — the moonshotHiggs eval
+  JSONs are just episodic memory with timestamps.
+
+> Same story, same ladder — but now the organism is being built
+> **where the Higgs was found**, on the data that found it.
+
+---
+
+## Act 11 · **Ramon Llull, Prototype Systems Engineer**
 
 ---
 
@@ -1096,6 +1154,7 @@ ARS GENERALIS concepts × loop × verification        "this program"
 - **Dreaming is the offline loop**: replay → prune → consolidate → simulate → propose. Recursive self-improvement is safe only because every dream is a *diff* that must still pass a spine the dreamer cannot edit.
 - **Long jobs hibernate**: checkpointed, idempotent, budgeted steps behind a deterministic policy — the OpenClaw lesson: the lobster is fine, **the leash is the feature**.
 - **Axioms, not vibes**: slop is an unverified assertion; the axiom stack (retrieval → deterministic gates → proof kernels → certainty scores → immutable audit) makes text **show its work**.
+- **moonshotHiggs is the home turf**: OGTS oracles = spine, RAG failure cases = senses, tree search = dreaming with a budget — the lab's ladder, running on the data that found the Higgs.
 - Llull's *Ars generalis* was the first **combinatorial reasoning machine** — it lacked only a body that can sense whether it worked. **That's the thing you're building.**
 
 ---
@@ -1120,6 +1179,7 @@ a spine made of code, two reflexes, two memories, and a judge it can't bribe.
   (`git checkout v1-amoeba` and run the four acts). Bring opencode.
 - **Language path:** Rust — *The Rust Programming Language* (free, the book); Lean — *Theorem Proving in Lean 4* (free, Lean community site). Both read beautifully in one focused week each.
 - **Always-on agents:** read OpenClaw's docs *and* its security post-mortems before granting anything. The axiom-stack pattern (certainty scoring + immutable audit) has open-source implementations worth studying — pick one, read its threat model first.
+- **moonshotHiggs:** `git clone https://github.com/uzzielperez/moonshotHiggs.git` — run `evals/ogts/run_ogts_eval.py` with `linear_retry` vs `ogts` and watch budgeted search beat retry. That's Act 8's dreaming, in one command.
 - Llull, primary-ish: *Ars generalis ultima* (English translations exist; the wheels are diagrammed beautifully).
 - Biology grounding: read about **cephalization** and the **C. elegans connectome** — 302 neurons, fully mapped; the simplest animal anyone has ever "read out" completely.
 - Then ask the Llull question: *if you could only keep 9 primitives for your agent, which 9?*
