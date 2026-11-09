@@ -26,7 +26,7 @@ Evolution didn't add *more cell*. It added **internal organization**.
 
 ---
 
-## Roadmap — five acts
+## Roadmap — six acts
 
 | Act | Question | Biology |
 |-----|----------|---------|
@@ -34,7 +34,8 @@ Evolution didn't add *more cell*. It added **internal organization**.
 | 2 | What breaks when prompts get long? | The **colonial slime** |
 | 3 | What is an agent loop? | The first **nerve net** |
 | 4 | Brain vs. spinal cord — who does what? | **Centralization** |
-| 5 | Llull's *Ars generalis* → today's agent specs | The **art of combining ideas** |
+| 5 | Hands-on: a physics fit that grows organs | The **lab** |
+| 6 | Llull's *Ars generalis* → today's agent specs | The **art of combining ideas** |
 
 ---
 
@@ -355,7 +356,137 @@ Same model. Same prompts, roughly. **Different animal.**
 
 ---
 
-## Act 5 · **Ramon Llullus, Prototype Systems Engineer**
+## Act 5 · **Teaching It: The Physics Fitting Lab**
+
+---
+
+## Why teach agents on a physics fit?
+
+- The *task* is trivial — an undergrad fits it in a minute. **Good.**
+  Attention goes to the *organism*, not the physics.
+- It has everything agents need: noisy data, a right answer, a natural verifier.
+- `σ(E) = A/E²` for e⁺e⁻ → μ⁺μ⁻ — eight measurements, fit **A** (truth: 860 pb·GeV²).
+
+> Same storyline, one exercise: the fit goes from amoeba to CNS
+> in four git tags you can check out and diff.
+
+---
+
+## The lab, one picture
+
+<div id="lab-ladder-viz" class="viz-tall"></div>
+
+<span class="viz-note">click an organism — same file, four git tags; the diff is the lesson</span>
+
+```
+lab/fit_xsec.py          ← one file, four organisms
+v1-amoeba    vibe-coded fit, no tests, no memory
+v2-nerve-net handlers with roles, still amnesic
+v3-head      brain (log-space fit) + spine (verify) + reflex + results.json
+v4-cns       loop + judge-of-done + 2 memories + budget
+```
+
+Every state is a **git tag**. The history *is* the curriculum:
+`git diff v1-amoeba v3-head` is the lesson, written in diffs.
+
+---
+
+## v1 · the amoeba — check it out, feel it
+
+```bash
+git checkout v1-amoeba
+python3 fit_xsec.py        # A = 845.6 ... "done"
+```
+
+Now prompt your agent: *"make this fit better."*
+It rewrites the whole file, changes the architecture, forgets your
+constraint from two messages ago. **This is the baseline. Feel it.**
+
+---
+
+## v2 · the nerve net — roles, no memory
+
+```bash
+git checkout v2-nerve-net
+git diff v1-amoeba v2-nerve-net
+python3 fit_xsec.py && python3 fit_xsec.py   # identical. nothing learned.
+```
+
+`read_data / fit_a / report` — roles exist (jellyfish!).
+But run it a hundred times: amnesia. There is **no organ** for learning,
+and no prompt about remembering can substitute for an organ.
+
+---
+
+## v3 · grow the head — the hands-on core
+
+Four prompts, four organs. Participants build these *themselves*:
+
+| Prompt (to opencode) | Organ grown |
+|----------------------|-------------|
+| "replace the mean with a log-space fit; justify for 1/E² data" | **brain** |
+| "add deterministic verify(A) vs truth ±10% — no LLM judgment" | **spine** |
+| "if verify fails, apply correction √(A_true/A), no re-planning" | **reflex** |
+| "write results.json (runs, last_A, lesson); tighten noise if it exists" | **memory** |
+
+---
+
+## The payoff moment (run it twice)
+
+```bash
+rm -f results.json
+python3 fit_xsec.py     # run 1: A = 841.9  memory=none
+python3 fit_xsec.py     # run 2: A = 851.3  memory=read → tighter calibration
+```
+
+Closer to truth (860) **because it remembered** — same model, same code,
+no retraining. This is the slide people photograph:
+*improvement as a body function.*
+
+---
+
+## v4 · the CNS — what the workshop ends with
+
+```bash
+git checkout v4-cns
+python3 fit_xsec.py && python3 fit_xsec.py && cat lessons.md
+```
+
+- **loop** with budget (`MAX_ITERS`) — proprioception: it counts its own effort
+- **judge()** — deterministic done-check the fitting code cannot bribe
+- **two memories, two lifetimes** — `results.json` (episodic) + `lessons.md` (semantic)
+
+> Final exercise: from v3, prompt to v4 using **only the deck's checklist** —
+> then `git diff v3-head v4-cns`. The differences *are* the discussion.
+
+---
+
+## Everyone uses opencode — and if they don't?
+
+The lab assumes **opencode** (any agentic CLI works: Claude Code, Codex CLI, Cursor agent).
+
+| Missing | Fallback |
+|---------|----------|
+| no git | GitHub/GitLab Desktop — same thing with buttons |
+| no git, no client | `states/v1.py … v4.py` — plain files, `diff -u` by eye |
+| no terminal agent | any chat agent + copy-paste — **you** are the spinal cord |
+
+> The lesson survives every downgrade. The organism doesn't.
+
+---
+
+## Honesty box (read this to your students)
+
+- `A_TRUE` verifies the fit — in research you'd verify against control
+  channels or a second detector. Same **organ**, different signal.
+- v3/v4 "learning" is scripted calibration tightening, not magic —
+  that's exactly the point: **memory + loop + verifier = improvement.**
+- `random.seed(42)` makes the workshop deterministic. Remove it and
+  watch the reflex actually earn its keep.
+
+---
+
+## Act 6 · **Ramon Llullus, Prototype Systems Engineer**
 
 ---
 
@@ -458,6 +589,7 @@ ARS GENERALIS concepts × loop × verification        "this program"
 - Prompt-stuffing = **slime mold**: louder, still blob-shaped. Attention is a fixed pie.
 - A **loop** (sense→decide→act→remember) is the first nerve net — the model never changes; the *body* does.
 - Mature agents **cephalize**: brain = judgment, **spinal cord = deterministic code**, reflexes skip the brain entirely.
+- The **lab**: one physics fit, four git tags — `v1-amoeba → v4-cns`. Run v3 twice and watch memory, not the model, close the gap to truth.
 - Llull's *Ars generalis* was the first **combinatorial reasoning machine** — it lacked only a body that can sense whether it worked. **That's the thing you're building.**
 
 ---
@@ -477,6 +609,7 @@ a spine made of code, two reflexes, two memories, and a judge it can't bribe.
 ## Try it & dig deeper
 
 - **Rebuild one old vibe-prompted session** using the checklist. Time it. Compare token bills.
+- **The lab lives at `/lab/`** on this site — clone the repo, `git checkout v1-amoeba`, and run the four acts. Bring opencode.
 - Llull, primary-ish: *Ars generalis ultima* (English translations exist; the wheels are diagrammed beautifully).
 - Biology grounding: read about **cephalization** and the **C. elegans connectome** — 302 neurons, fully mapped; the simplest animal anyone has ever "read out" completely.
 - Then ask the Llull question: *if you could only keep 9 primitives for your agent, which 9?*
@@ -513,6 +646,22 @@ while not done:
         memory = [system_prompt, user_goal, compress(memory)]
     done     = judge(goal, memory).finished  # JUDGE    (not the actor)
 ```
+
+---
+
+## Backup · the lab, mapped to the loop
+
+| Loop line | `fit_xsec.py` v4 |
+|-----------|------------------|
+| `memory = [...]` | `load_episodic()` + `lessons.md` |
+| `llm.call` / brain | `fit_a_weighted()` — log-space fit |
+| `blocked(action)` reflex | spread-tightening when `judge` fails |
+| `tools.run` | `read_data()` — re-sense the detector |
+| `budget.exceeded()` | `iters < MAX_ITERS` |
+| `judge(...)` | `judge(A_TRUE, a)` — deterministic, unbribeable |
+| `memory +=` | `append_episodic()` + `append_semantic()` |
+
+Same twelve lines from Act 3 — now you can point at every one in a real file.
 
 ---
 

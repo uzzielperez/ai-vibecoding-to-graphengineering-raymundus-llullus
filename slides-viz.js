@@ -459,6 +459,52 @@
     });
   }
 
+  /* ── 5 · Lab ladder ─────────────────────────────────────────────────── */
+
+  var LAB_STATES = [
+    { tag: "v1-amoeba",    name: "amoeba",     organs: [],                                   out: "A = 845.6  ·  run twice: identical" },
+    { tag: "v2-nerve-net", name: "nerve net",  organs: ["roles"],                            out: "A = 845.6  ·  run twice: identical" },
+    { tag: "v3-head",      name: "head",       organs: ["roles", "brain", "spine", "reflex", "memory"], out: "run 1: 841.9 → run 2: 851.3 (+1% closer to 860)" },
+    { tag: "v4-cns",       name: "CNS",        organs: ["roles", "brain", "spine", "reflex", "memory", "loop", "judge", "budget"], out: "run 1: 841.9 → run 2: 851.3 · iters=1/5 · lessons.md grows" }
+  ];
+
+  function initLabLadder(section) {
+    var root = section.querySelector("#lab-ladder-viz");
+    if (!root || section.dataset.labInit === "1") return;
+    section.dataset.labInit = "1";
+
+    var wrap = el("div", "ae-wrap");
+    var bar = el("div", "ae-bar");
+    bar.style.height = "64px";
+    var controls = el("div", "am-controls");
+    var readout = el("div", "am-readout", "git checkout v1-amoeba && python3 fit_xsec.py");
+
+    LAB_STATES.forEach(function (st, i) {
+      var seg = el("div", "ae-seg", st.name);
+      seg.style.flexGrow = "1";
+      seg.style.background = ["#8a4a3f", "#a6652a", "#c98c36", "#e8b64c"][i];
+      seg.style.cursor = "pointer";
+      seg.addEventListener("click", function () { select(i); });
+      bar.appendChild(seg);
+    });
+
+    function select(i) {
+      var st = LAB_STATES[i];
+      var organs = st.organs.length
+        ? st.organs.map(function (o) { return "<b>" + o + "</b>"; }).join(" · ")
+        : "<b>none</b>";
+      readout.innerHTML =
+        '<span style="color:' + C_GOLD + '">git checkout ' + st.tag + "</span> → organs: " + organs +
+        "<br>→ " + st.out;
+    }
+
+    controls.appendChild(el("span", "viz-note", "click a stage:"));
+    wrap.appendChild(bar);
+    wrap.appendChild(controls);
+    wrap.appendChild(readout);
+    root.appendChild(wrap);
+  }
+
   /* ── Deck glue ───────────────────────────────────────────────────────── */
 
   function onDeckSlide(section) {
@@ -467,6 +513,7 @@
     if (section.querySelector("#attention-economy-viz")) initAttentionEconomy(section);
     if (section.querySelector("#agent-loop-viz")) initAgentLoop(section);
     if (section.querySelector("#llull-wheels-viz")) initLlullWheels(section);
+    if (section.querySelector("#lab-ladder-viz")) initLabLadder(section);
   }
 
   Reveal.on("ready", function () {
