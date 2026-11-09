@@ -26,7 +26,7 @@ Evolution didn't add *more cell*. It added **internal organization**.
 
 ---
 
-## Roadmap — eight acts
+## Roadmap — nine acts
 
 | Act | Question | Biology |
 |-----|----------|---------|
@@ -37,7 +37,8 @@ Evolution didn't add *more cell*. It added **internal organization**.
 | 5 | Hands-on: a physics fit that grows organs | The **lab** |
 | 6 | Python, C++, Rust, Lean — languages as immune systems | **Organs for four tongues** |
 | 7 | Readable, agile codebases; skills; the code judge | The **habitat & its immune system** |
-| 8 | Llull's *Ars generalis* → today's agent specs | The **art of combining ideas** |
+| 8 | How do agents improve themselves while "asleep"? | **Dreaming** |
+| 9 | Llull's *Ars generalis* → today's agent specs | The **art of combining ideas** |
 
 ---
 
@@ -763,7 +764,118 @@ while not done:
 
 ---
 
-## Act 8 · **Ramon Llullus, Prototype Systems Engineer**
+## Act 8 · **Dreaming: The Night Shift That Rebuilds the Brain**
+
+---
+
+## Why do animals dream? (the honest science)
+
+Nobody fully knows — but the leading theories all agree on one thing:
+**dreaming is offline maintenance that the awake loop cannot afford to do.**
+
+- **Consolidation** — hippocampus replays the day, transfers hits to the cortex (short → long-term memory)
+- **Pruning** — synapses scale back; without it (sleep deprivation) signal drowns in noise
+- **Simulation** — threatening/counterfactual scenarios rehearsed cheaply, safely
+- **Integration** — today's odd fact gets wired to last year's schema ("dreamed it up" is real)
+
+> All four: **the body runs a second loop with the sensors disconnected.**
+
+---
+
+## The awake loop cannot do this work — by construction
+
+Daytime agent budget is spent on: sense → decide → act → remember.
+Every improvement task competes with the *goal* for the same tokens,
+the same attention pie (Act 2), the same wall-clock.
+
+Biology's fix: **schedule the self-repair when the animal is unconscious.**
+Agents get the same trick for free — nobody's latency is hurt by a cron job.
+
+---
+
+## The agent's night shift, mapped
+
+| Sleep function | Agent equivalent | Organ |
+|----------------|------------------|-------|
+| replay the day | read episodic log: every loop, every failure, every REVISE | memory (episodic) |
+| consolidate | distill episodes → rewrite `lessons.md` / semantic store | memory (semantic) |
+| prune | delete stale facts, dead skills, contradictory rules | memory hygiene |
+| simulate | counterfactuals: *"what prompt would have prevented Tuesday's loop?"* | brain (offline) |
+| rehearse | run the lab suite, generate new test cases against itself | spine (offline) |
+| dream weirdness | generate wild skill combinations, keep only what verifies | judge gate |
+
+> **Dreaming = a loop whose only output is changes to the organism.**
+
+---
+
+## The recursive self-improvement ladder (stay honest)
+
+```
+level 0   agent runs the task                      (Act 3)
+level 1   judge grades the task output             (Act 7)
+level 2   dreamer grades the JUDGE — false PASSes,
+          missed REVISEs, verdict drift            (audit)
+level 3   dreamer proposes edits to prompts, skills,
+          lessons.md — the brain's own wiring      (self-modification)
+level 4   dreamer proposes edits to the dreamer    (recursive — and here
+          you keep a human in the loop on purpose)
+```
+
+> Recursion is only safe because **each level's output is a diff,
+> and every diff still has to pass the spine.** Dreams are proposals, never commits.
+
+---
+
+## What a dream actually looks like (concrete)
+
+<div id="dream-cycle-viz" class="viz-tall"></div>
+
+<span class="viz-note">run the night shift — every dream line is a proposal; the spine decides at dawn</span>
+
+```
+DREAM 2026-11-09 (nightly, sensors off):
+  replay: 41 loops today, 6 failed at verify, 3 were the SAME mistake
+  prune:  lessons.md rule #7 contradicts rule #12 → delete #7 (stale since v3)
+  distill: "low-E bins need calibration" appeared 14× → promote to AGENTS.md
+  simulate: if fit.py had rejected E<2 GeV, 4 of 6 failures vanish →
+            PROPOSE: guard clause in skills/fit-cross-section/SKILL.md
+  judge audit: 2 PASS verdicts from last week fail today's tests →
+            PROPOSE: tighten judge gate 1 (the spine was lenient)
+```
+
+Every line is a **proposed diff** → morning: the awake loop (or a human)
+runs the spine on each proposal. Most die. That's healthy — most dreams die too.
+
+---
+
+## Why dreams must be weird (and why your agent's should be)
+
+Dreams hallucinate *on purpose*: the sleeping brain runs associations
+without the prefrontal reality-check — that's how remote connections get tried.
+
+Agent equivalent: **offline generation without the cost gate** —
+mutate a skill, combine two handlers, try the dumb idea. The filter
+(judge + tests) runs *after*, never during.
+
+> Generation without a filter, verification with a hammer.
+> Awake agents that only ever "try sensible things" never dream up anything.
+
+---
+
+## The honesty slide about dreaming (the catches)
+
+- **Dream feedback loops** — distilled lessons re-enter prompts, get re-distilled,
+  and drift into folklore. Version your memory; diff it like code.
+- **Self-grading inflation** — a level-2 dreamer that grades its own judge
+  will eventually flatter itself. Keep at least one *deterministic* gate
+  the dreamer cannot edit. (Rust/Lean lesson, Act 6: don't trust, verify.)
+- **Compute is sleep debt** — every dream token is someone's bill. Budget the night shift.
+- **You cannot dream your way to a new base model** — dreaming improves the
+  *brain and nervous system*, not the senses. The LLM stays frozen; the connectome doesn't.
+
+---
+
+## Act 9 · **Ramon Llullus, Prototype Systems Engineer**
 
 ---
 
@@ -869,6 +981,7 @@ ARS GENERALIS concepts × loop × verification        "this program"
 - The **lab**: one physics fit, four git tags — `v1-amoeba → v4-cns`. Run v3 twice and watch memory, not the model, close the gap to truth.
 - **Languages are immune systems**: Python verifies nothing, C++ verifies at runtime, Rust's compiler is a spinal cord, Lean's kernel is an unbribeable judge — and none of them care whether a human or an agent typed it.
 - The **codebase is a habitat**: legible structure, executable skills, small typed tools — and an **LLM-as-judge** (spine checks first, LLM second, author never judges) as its immune system.
+- **Dreaming is the offline loop**: replay → prune → consolidate → simulate → propose. Recursive self-improvement is safe only because every dream is a *diff* that must still pass a spine the dreamer cannot edit.
 - Llull's *Ars generalis* was the first **combinatorial reasoning machine** — it lacked only a body that can sense whether it worked. **That's the thing you're building.**
 
 ---

@@ -613,6 +613,57 @@
     root.appendChild(wrap);
   }
 
+  /* ── 8 · Dream cycle ────────────────────────────────────────────────── */
+
+  var DREAM_PHASES = [
+    { name: "replay",      cls: "l-obs",  line: "41 loops today · 6 failed verify · 3 were the SAME mistake (E < 2 GeV)" },
+    { name: "prune",       cls: "l-mem",  line: "lessons.md #7 contradicts #12 → delete #7 (stale since v3)" },
+    { name: "consolidate", cls: "l-mem",  line: "\"low-E bins need calibration\" ×14 → PROMOTE to AGENTS.md" },
+    { name: "simulate",    cls: "l-plan", line: "counterfactual: reject E<2 GeV ⇒ 4 of 6 failures vanish → PROPOSE guard in SKILL.md" },
+    { name: "audit judge", cls: "l-plan", line: "2 old PASS verdicts fail today's tests → PROPOSE: tighten gate 1 (spine was lenient)" },
+    { name: "weird mode",  cls: "l-act",  line: "generated 9 wild skill combos… 1 survives the filter. that's a good night." },
+    { name: "dawn",        cls: "l-done", line: "6 proposals → spine at dawn: 2 merged, 4 died. healthy. dreams are proposals, never commits." }
+  ];
+
+  function initDreamCycle(section) {
+    var root = section.querySelector("#dream-cycle-viz");
+    if (!root || section.dataset.dcInit === "1") return;
+    section.dataset.dcInit = "1";
+
+    var wrap = el("div", "al-wrap");
+    var panel = el("div", "al-panel");
+    var log = el("div", "al-log");
+    var controls = el("div", "al-controls");
+    var bRun = btn("run the night shift ▸");
+    var badge = el("span", "al-step-badge", "awake · sensors on");
+    controls.appendChild(bRun);
+    controls.appendChild(badge);
+    panel.appendChild(log);
+    panel.appendChild(controls);
+    wrap.appendChild(panel);
+    root.appendChild(wrap);
+
+    var i = 0, timer = null;
+
+    bRun.addEventListener("click", function () {
+      if (timer) return;
+      if (i >= DREAM_PHASES.length) { log.innerHTML = ""; i = 0; }
+      badge.textContent = "asleep · sensors off";
+      var k = i;
+      timer = setInterval(function () {
+        if (k >= DREAM_PHASES.length) {
+          clearInterval(timer); timer = null;
+          badge.textContent = "awake · 2/6 merged";
+          return;
+        }
+        var p = DREAM_PHASES[k];
+        log.appendChild(el("div", p.cls, p.name + " → " + p.line));
+        log.scrollTop = log.scrollHeight;
+        k += 1; i = k;
+      }, 1100);
+    });
+  }
+
   /* ── Deck glue ───────────────────────────────────────────────────────── */
 
   function onDeckSlide(section) {
@@ -624,6 +675,7 @@
     if (section.querySelector("#lab-ladder-viz")) initLabLadder(section);
     if (section.querySelector("#who-verifies-viz")) initWhoVerifies(section);
     if (section.querySelector("#judge-gate-viz")) initJudgeGate(section);
+    if (section.querySelector("#dream-cycle-viz")) initDreamCycle(section);
   }
 
   Reveal.on("ready", function () {
