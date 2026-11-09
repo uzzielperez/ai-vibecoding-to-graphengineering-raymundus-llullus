@@ -26,7 +26,7 @@ Evolution didn't add *more cell*. It added **internal organization**.
 
 ---
 
-## Roadmap — nine acts
+## Roadmap — ten acts
 
 | Act | Question | Biology |
 |-----|----------|---------|
@@ -38,7 +38,8 @@ Evolution didn't add *more cell*. It added **internal organization**.
 | 6 | Python, C++, Rust, Lean — languages as immune systems | **Organs for four tongues** |
 | 7 | Readable, agile codebases; skills; the code judge | The **habitat & its immune system** |
 | 8 | How do agents improve themselves while "asleep"? | **Dreaming** |
-| 9 | Llull's *Ars generalis* → today's agent specs | The **art of combining ideas** |
+| 9 | Long jobs, always-on agents, OpenClaw & the axiom stack | **Hibernation & the leash** |
+| 10 | Llull's *Ars generalis* → today's agent specs | The **art of combining ideas** |
 
 ---
 
@@ -875,7 +876,118 @@ mutate a skill, combine two handlers, try the dumb idea. The filter
 
 ---
 
-## Act 9 · **Ramon Llullus, Prototype Systems Engineer**
+## Act 9 · **Hibernation: Long Jobs, Failure, and the Leash**
+
+---
+
+## Dreaming is nightly. What about the 9-hour job?
+
+Everything so far loops in seconds. Real work — "refactor the detector
+codebase", "fit 400 channels" — runs for **hours**, and long jobs fail:
+rate limits, crashes, a model that wanders at hour three.
+
+> Biology again: animals don't just sleep — they **hibernate**.
+> Metabolism drops, the body keeps state through the long dark,
+> and it can be interrupted at any point and still wake up alive.
+
+---
+
+## The pattern people get wrong: OpenClaw, honestly
+
+**OpenClaw** (MIT, the "lobster" agent — *the AI that really does things*)
+is what happens when an agent gets **always-on channels**: messaging,
+email, your calendar, your shell. It is the most ambitious nervous system
+anyone has shipped to regular users.
+
+It is also, in the wild, often configured as a **brain with no spine**:
+broad shell access, credentials in env vars, no per-action budgets,
+reachable from the internet. Every week's post-mortem is the same story:
+*the agent did exactly what it was told, with the keys to everything.*
+
+---
+
+## The leash (this is Act 4's anatomy, applied)
+
+| Organ | Safe OpenClaw-style deployment |
+|-------|-------------------------------|
+| spine | every action passes a **deterministic policy** before execution — code, not vibes |
+| reflexes | hard caps: spend/hour, files outside workspace blocked, `rm`/`sudo`/network = deny |
+| senses | **read-only by default**; writes only into a workspace sandbox |
+| memory | credentials live in a vault the *tools* use — never in the prompt |
+| judge | long jobs checkpoint + require human sign-off at irreversible steps |
+| dreamer | the agent may **propose** config changes; a human commits them |
+
+> The lobster is fine. **The leash is the feature.** Same organism,
+> different collar.
+
+---
+
+## Long-running jobs: hibernate, don't hold your breath
+
+The safe pattern for jobs that can fail — and they will:
+
+```
+job = { goal, plan, state, budget }        # serializable — the whole animal on disk
+loop:
+  step = brain(plan, state)                # one small, idempotent step
+  result = spine.run(step)                 # policy-checked, sandboxed, capped
+  state  = checkpoint(state, result)       # durable: crash = rewind, not disaster
+  if budget.exceeded() or step.irreversible:
+     pause_for_human(state)                # hibernation is a first-class state
+```
+
+- **checkpoint like a game** — git commit + state file after every step
+- **idempotent steps** — re-running a checkpoint must be harmless (Act 7's tool shapes)
+- **budgets are the metabolism** — tokens, dollars, wall-clock; when it runs out, the job sleeps and waits, it does not thrash
+- **fail loud, wake specific** — a failed job wakes you with a diff and a question, not a 400-line transcript
+
+---
+
+## The honesty slide about always-on agents (the catches)
+
+- **Prompt injection is the new phishing** — an always-on agent that *reads*
+  the world can be *told* things by it. Untrusted text is an attack surface.
+- **Compounding error** — hour three's wander is hour one's misunderstanding, compounded.
+  This is why checkpoints carry a judge, not just state.
+- **The leash rots** — permissions granted "just for today" fossilize. Audit grants monthly.
+- **Always-on ≠ always-trusted** — the moment it can spend your money or delete your data
+  without a gate, you didn't build a nervous system, you built a **reflex with root**.
+
+---
+
+## Axioms, not vibes: the anti-slop stack
+
+What the whole deck has been circling: **slop is an unverified assertion.**
+The open-source answer is a stack whose name is a pun on its function —
+**AXIOM-style "certainty middleware"**: score every AI output *before*
+it triggers a real-world action.
+
+| Layer | What it refuses to trust | Open-source tools |
+|-------|--------------------------|-------------------|
+| **facts** | the model's own memory | retrieval + citations (RAG done honestly) |
+| **claims** | "tests pass" said by the author | the test runner itself — deterministic gates |
+| **proofs** | "this is proven" | Lean/Coq kernels — an axiom is checked, not admired |
+| **certainty** | confident prose | calibration scores, uncertainty gates (AXIOM-style CDI scoring) |
+| **audit** | "it worked yesterday" | immutable logs — STP-style trails, git as memory |
+
+> An **axiom** in the Greek sense: something that *can be seen to be true*.
+> AI slop is text that asks to be believed. The axiom stack makes it **show its work**.
+
+---
+
+## The rule you take home (one sentence per layer)
+
+- Never trust a **claim** that has no deterministic check available.
+- Never trust a **score** produced by the model that produced the answer (Act 7's judge rule).
+- Never trust a **proof** you haven't re-checked — Lean certificates get re-run, not read.
+- Never trust a **memory** you can't diff — memory is code, version it.
+
+> Slop survives on being unreadable, unverifiable, and unversioned.
+> The axiom stack is just those three words, negated.
+
+---
+
+## Act 10 · **Ramon Llull, Prototype Systems Engineer**
 
 ---
 
@@ -982,6 +1094,8 @@ ARS GENERALIS concepts × loop × verification        "this program"
 - **Languages are immune systems**: Python verifies nothing, C++ verifies at runtime, Rust's compiler is a spinal cord, Lean's kernel is an unbribeable judge — and none of them care whether a human or an agent typed it.
 - The **codebase is a habitat**: legible structure, executable skills, small typed tools — and an **LLM-as-judge** (spine checks first, LLM second, author never judges) as its immune system.
 - **Dreaming is the offline loop**: replay → prune → consolidate → simulate → propose. Recursive self-improvement is safe only because every dream is a *diff* that must still pass a spine the dreamer cannot edit.
+- **Long jobs hibernate**: checkpointed, idempotent, budgeted steps behind a deterministic policy — the OpenClaw lesson: the lobster is fine, **the leash is the feature**.
+- **Axioms, not vibes**: slop is an unverified assertion; the axiom stack (retrieval → deterministic gates → proof kernels → certainty scores → immutable audit) makes text **show its work**.
 - Llull's *Ars generalis* was the first **combinatorial reasoning machine** — it lacked only a body that can sense whether it worked. **That's the thing you're building.**
 
 ---
@@ -1005,6 +1119,7 @@ a spine made of code, two reflexes, two memories, and a judge it can't bribe.
   `git clone https://github.com/uzzielperez/raymundus-llullus-lab.git`
   (`git checkout v1-amoeba` and run the four acts). Bring opencode.
 - **Language path:** Rust — *The Rust Programming Language* (free, the book); Lean — *Theorem Proving in Lean 4* (free, Lean community site). Both read beautifully in one focused week each.
+- **Always-on agents:** read OpenClaw's docs *and* its security post-mortems before granting anything. The axiom-stack pattern (certainty scoring + immutable audit) has open-source implementations worth studying — pick one, read its threat model first.
 - Llull, primary-ish: *Ars generalis ultima* (English translations exist; the wheels are diagrammed beautifully).
 - Biology grounding: read about **cephalization** and the **C. elegans connectome** — 302 neurons, fully mapped; the simplest animal anyone has ever "read out" completely.
 - Then ask the Llull question: *if you could only keep 9 primitives for your agent, which 9?*
