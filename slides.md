@@ -26,7 +26,7 @@ Evolution didn't add *more cell*. It added **internal organization**.
 
 ---
 
-## Roadmap — seven acts
+## Roadmap — eight acts
 
 | Act | Question | Biology |
 |-----|----------|---------|
@@ -36,7 +36,8 @@ Evolution didn't add *more cell*. It added **internal organization**.
 | 4 | Brain vs. spinal cord — who does what? | **Centralization** |
 | 5 | Hands-on: a physics fit that grows organs | The **lab** |
 | 6 | Python, C++, Rust, Lean — languages as immune systems | **Organs for four tongues** |
-| 7 | Llull's *Ars generalis* → today's agent specs | The **art of combining ideas** |
+| 7 | Readable, agile codebases; skills; the code judge | The **habitat & its immune system** |
+| 8 | Llull's *Ars generalis* → today's agent specs | The **art of combining ideas** |
 
 ---
 
@@ -615,7 +616,154 @@ theorem fit_converges (h : 0 < n) : |A_fit − A_true| / A_true ≤ 0.05 := by
 
 ---
 
-## Act 7 · **Ramon Llullus, Prototype Systems Engineer**
+## Act 7 · **The Codebase as Habitat: Skills, Tool-Calling, and the Judge**
+
+---
+
+## The question nobody asks on day one
+
+Your agent wrote 400 lines. They work. Tests pass.
+
+> **Can the *next* agent — or you, in three weeks — live inside this code?**
+
+A codebase is not a deliverable. It is a **habitat**: the environment
+your agents evolve in. Buildings that can't be read can't be inherited.
+
+---
+
+## Legibility is a survival trait
+
+Amoebas don't need legible bodies — nothing reads them. Every complex
+organism is **readable by its own parts**: genes, receptors, maps.
+
+For agents, the codebase is the map. Three failure signatures of an
+illegible habitat:
+
+- **grep roulette** — finding behavior requires reading everything
+- **copy-paste evolution** — the same logic, mutated, in six files
+- **CLAUDE.md archaeology** — the rules file is now longer than the code
+
+---
+
+## Agile, but for agents (the honest version)
+
+Agile was always about **cost of change**. Agent-era update:
+
+| Human agile | Agent habitat |
+|-------------|---------------|
+| small commits | small **diffable** commits — the git history is the agent's memory |
+| code review | **judge review** (this act's finale) |
+| refactoring | agents refactor *for* you — if they can *find* the code |
+| docs humans won't read | **skills agents will execute** |
+
+> The agile manifesto, one line: **responding to change > the vibe.**
+
+---
+
+## Teachable structure (the habitat's skeleton)
+
+```
+project/
+  README.md        ← why, in 10 lines (agents read this first)
+  AGENTS.md        ← the rules of the habitat (short! see Act 2)
+  src/             ← behavior lives in ONE place per concern
+  skills/          ← executable know-how (next slide)
+  tests/           ← the spinal cord — deterministic, unbribeable
+  results/         ← episodic memory the loop writes
+```
+
+Rule of thumb: **a new agent should pass its first useful tool call
+within 3 turns of landing in the repo.** If not, the habitat is the bug.
+
+---
+
+## Skills: procedural memory that executes
+
+A **skill** is a folder of instructions + scripts an agent loads when the
+task matches — procedural memory, like riding a bike, not episodic like
+"that one time in 2019".
+
+```
+skills/fit-cross-section/
+  SKILL.md      ← when to use, steps, pitfalls, how to verify
+  fit.py        ← the tested implementation
+```
+
+> A skill turns *"you are a senior physicist"* (a vibe) into
+> *"run fit.py, check residual plot, verify against control channel"*
+> (a **reflex with documentation**).
+
+---
+
+## Effective tool callers are *boring* callers
+
+What makes an agent a good tool caller is not cleverness — it's **shapes**:
+
+- **small verbs** — `read_file`, `run_test`, `fit_a` — not `do_physics(task)`
+- **typed edges** — JSON in, JSON out; a tool that returns prose is a tool that returns vibes
+- **idempotence** — calling twice must not double-charge, double-write, or double-refund
+- **errors as data** — `{"error": "no such key"}` beats a stack trace the model will role-play
+
+> Every shape rule moves certainty from the model into the interface.
+> **Spinal cord, again.**
+
+---
+
+## The habitat's immune system: LLM-as-judge on the code
+
+<div id="judge-gate-viz" class="viz-tall"></div>
+
+<span class="viz-note">run the judge on a diff — deterministic gates first, LLM judgment second</span>
+
+Now the payoff of the whole deck — a **judge agent whose job is the codebase**:
+
+```
+judge on each PR:
+  1. spine check   → tests pass? lint clean?         (deterministic first)
+  2. legibility    → could a fresh agent find this behavior in 3 turns?
+  3. habitat fit   → new file where the skeleton says it goes?
+  4. skill reuse   → did it re-implement an existing skill? (copy-paste evolution)
+  5. verdict       → PASS / REVISE with a specific, checkable ask
+```
+
+The judge is **not a vibe check**: steps 1 and 4 are code; the LLM
+judges only what code cannot (legibility, fit).
+
+---
+
+## Judge design rules (from the Act 4 anatomy)
+
+- **The author never judges.** Separate call, separate prompt, ideally separate model.
+- **Judge the diff, not the repo** — attention is a fixed pie (Act 2).
+- **Verdicts must be checkable** — "rename `fit_a` → `fit_a_weighted` and
+  update the skill" beats "make it cleaner".
+- **The judge can be wrong** — log its verdicts to episodic memory; audit
+  a sample weekly. Even judges need proprioception.
+
+> This is the Act 3 judge-of-done, promoted from *task* level to
+> *ecosystem* level: the habitat checking its own weather.
+
+---
+
+## The loop, now with a habitat
+
+```python
+while not done:
+    plan   = brain(goal, memory, skills)          # judgment
+    code   = act(tools, plan)                     # small verbs, typed edges
+    verdict = judge(diff=code, tests=spine)       # spine first, LLM second
+    if verdict.revise:
+        memory += verdict.ask                     # REVISE is memory, not shame
+    else:
+        commit(code); memory += shipped           # git = the habitat's spine
+```
+
+> Readable code isn't politeness. It's the difference between
+> an agent that **inherits** a body and one that keeps rebirthing an amoeba.
+
+---
+
+## Act 8 · **Ramon Llullus, Prototype Systems Engineer**
 
 ---
 
@@ -720,6 +868,7 @@ ARS GENERALIS concepts × loop × verification        "this program"
 - Mature agents **cephalize**: brain = judgment, **spinal cord = deterministic code**, reflexes skip the brain entirely.
 - The **lab**: one physics fit, four git tags — `v1-amoeba → v4-cns`. Run v3 twice and watch memory, not the model, close the gap to truth.
 - **Languages are immune systems**: Python verifies nothing, C++ verifies at runtime, Rust's compiler is a spinal cord, Lean's kernel is an unbribeable judge — and none of them care whether a human or an agent typed it.
+- The **codebase is a habitat**: legible structure, executable skills, small typed tools — and an **LLM-as-judge** (spine checks first, LLM second, author never judges) as its immune system.
 - Llull's *Ars generalis* was the first **combinatorial reasoning machine** — it lacked only a body that can sense whether it worked. **That's the thing you're building.**
 
 ---

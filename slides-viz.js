@@ -544,6 +544,75 @@
     root.appendChild(wrap);
   }
 
+  /* ── 7 · Judge gate ─────────────────────────────────────────────────── */
+
+  var JUDGE_CHECKS = [
+    { name: "spine: tests + lint", kind: "code" },
+    { name: "legibility: findable in 3 turns", kind: "llm" },
+    { name: "habitat fit: right place in skeleton", kind: "llm" },
+    { name: "skill reuse: no re-implementation", kind: "code" }
+  ];
+  var JUDGE_DIFFS = [
+    { label: "diff A — log-space fit + test", pass: [true, true, true, true], verdict: "PASS — ship it; diff is 14 lines, test included" },
+    { label: "diff B — re-implemented fit_a, no test", pass: [true, false, false, false], verdict: "REVISE — skills/fit-cross-section/fit.py already does this; delete the copy, call the skill, add the test" },
+    { label: "diff C — one-liner, breaks 2 tests", pass: [false, true, true, true], verdict: "BLOCKED at gate 1 — deterministic; the LLM never even gets asked. Spine first." }
+  ];
+
+  function initJudgeGate(section) {
+    var root = section.querySelector("#judge-gate-viz");
+    if (!root || section.dataset.jgInit === "1") return;
+    section.dataset.jgInit = "1";
+
+    var wrap = el("div", "ae-wrap");
+    var controls = el("div", "am-controls");
+    JUDGE_DIFFS.forEach(function (d, i) {
+      var b = btn(d.label);
+      b.addEventListener("click", function () { run(i); });
+      controls.appendChild(b);
+    });
+
+    var board = el("div", "ae-legend");
+    board.style.flexDirection = "column";
+    board.style.gap = "6px";
+    board.style.fontFamily = "var(--font-mono)";
+    board.style.fontSize = "13px";
+
+    var verdict = el("div", "lw-question", "pick a diff — the judge runs its gates in order");
+
+    JUDGE_CHECKS.forEach(function (c) {
+      var row = el("div", "", '<span class="jg-mark">·</span> ' + c.name +
+        ' <span style="color:' + (c.kind === "code" ? C_BLUE : C_GOLD) + '">[' +
+        (c.kind === "code" ? "deterministic" : "llm") + "]</span>");
+      board.appendChild(row);
+    });
+
+    function run(i) {
+      var d = JUDGE_DIFFS[i];
+      var rows = board.children;
+      for (var k = 0; k < JUDGE_CHECKS.length; k++) {
+        var mark = rows[k].querySelector(".jg-mark");
+        var stop = false;
+        if (JUDGE_CHECKS[k].kind === "code" && !d.pass[k]) stop = true;
+        if (stop) {
+          mark.textContent = "✖"; mark.style.color = C_RED;
+          for (var m = k + 1; m < JUDGE_CHECKS.length; m++) {
+            rows[m].querySelector(".jg-mark").textContent = "—";
+            rows[m].querySelector(".jg-mark").style.color = C_MUTED;
+          }
+          break;
+        }
+        mark.textContent = d.pass[k] ? "✔" : "✖";
+        mark.style.color = d.pass[k] ? C_MINT : C_RED;
+      }
+      verdict.innerHTML = d.verdict;
+    }
+
+    wrap.appendChild(controls);
+    wrap.appendChild(board);
+    wrap.appendChild(verdict);
+    root.appendChild(wrap);
+  }
+
   /* ── Deck glue ───────────────────────────────────────────────────────── */
 
   function onDeckSlide(section) {
@@ -554,6 +623,7 @@
     if (section.querySelector("#llull-wheels-viz")) initLlullWheels(section);
     if (section.querySelector("#lab-ladder-viz")) initLabLadder(section);
     if (section.querySelector("#who-verifies-viz")) initWhoVerifies(section);
+    if (section.querySelector("#judge-gate-viz")) initJudgeGate(section);
   }
 
   Reveal.on("ready", function () {
