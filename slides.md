@@ -26,7 +26,7 @@ Evolution didn't add *more cell*. It added **internal organization**.
 
 ---
 
-## Roadmap — six acts
+## Roadmap — seven acts
 
 | Act | Question | Biology |
 |-----|----------|---------|
@@ -35,7 +35,8 @@ Evolution didn't add *more cell*. It added **internal organization**.
 | 3 | What is an agent loop? | The first **nerve net** |
 | 4 | Brain vs. spinal cord — who does what? | **Centralization** |
 | 5 | Hands-on: a physics fit that grows organs | The **lab** |
-| 6 | Llull's *Ars generalis* → today's agent specs | The **art of combining ideas** |
+| 6 | Python, C++, Rust, Lean — languages as immune systems | **Organs for four tongues** |
+| 7 | Llull's *Ars generalis* → today's agent specs | The **art of combining ideas** |
 
 ---
 
@@ -486,7 +487,135 @@ The lab assumes **opencode** (any agentic CLI works: Claude Code, Codex CLI, Cur
 
 ---
 
-## Act 6 · **Ramon Llullus, Prototype Systems Engineer**
+## Act 6 · **Learning Languages: Organs for Four Tongues**
+
+---
+
+## Why a language act in an agent talk?
+
+Because in the agent era the question changed. You no longer ask
+*"can I write this in C++?"* — you ask
+*"can I **tell** that this is correct?"*
+
+Languages are not vocabularies. They are **immune systems** of different strength.
+
+---
+
+## The four organisms
+
+| Language | Biology | What it guarantees |
+|----------|---------|--------------------|
+| **Python** | the amoeba, gloriously | intent, speed, reach — nothing else |
+| **C++** | the exoskeleton | speed, control — and full responsibility for every splinter |
+| **Rust** | the vertebrate | ownership/borrow rules **enforced at compile time** |
+| **Lean** | the nervous system | a **machine-checked proof** that the code meets its spec |
+
+---
+
+## Python: learn it first, forgive it everything
+
+- Zero ceremony: the language is 90% standard library and hope.
+- Perfect first organism — the vibe-prompting of languages.
+- Its sin: **nothing refuses to run.** `NoneType` has killed satellites.
+
+> Python answers "does it express my idea?" — and never asks "is it true?"
+
+---
+
+## C++: the exoskeleton
+
+- You manage every byte. The compiler manages your humility.
+- Decades of physics run on it — ROOT, Geant4, the LHC stacks.
+- Its sin: **it will compile your mistake.** Segfaults are runtime philosophy.
+
+> C++ answers "how fast does my mistake run?"
+
+---
+
+## The agent-era twist: you can't tell human from machine
+
+Ask five people: *"is this Python written by a human or an agent?"*
+Nobody can. And that's the trap —
+
+```python
+def fit_a(data):
+    return sum(s * E**2 for E, s in data) / len(data)
+```
+
+Plausible. Confident. **Wrong weighting, silently.**
+Python cannot tell you this, and neither can you, at 2 a.m., from a diff.
+
+---
+
+## Rust: the compiler as a spinal cord
+
+Rust's deal: the borrow checker refuses to compile
+data races, use-after-free, dangling refs — **deterministically, before runtime.**
+
+```rust
+fn fit_a(data: &[(f64, f64)]) -> f64 {
+    data.iter().map(|(e, s)| s * e * e).sum::<f64>()
+        / data.len() as f64
+}
+```
+
+> **Why it's nice now:** an agent's Rust either compiles — having passed a
+> 30-year-old deterministic reflex arc — or it doesn't run at all.
+> The compiler doesn't care who typed it. **Turing-test-proof guarantees.**
+
+---
+
+## Lean: the code that carries its own proof
+
+Lean 4 is a **proof assistant**: you write the theorem *and* the program,
+and the kernel machine-checks that the program satisfies the theorem.
+
+```lean
+theorem fit_converges (h : 0 < n) : |A_fit − A_true| / A_true ≤ 0.05 := by
+  -- no "looks right" — the kernel verifies every step, or rejects
+```
+
+- A Lean proof from an agent is **not a vibe** — it is checkable to the bit.
+- The type theory underneath (Calculus of Inductive Constructions)
+  is Llull's dream, finally with semantics: **combination with verification.**
+
+> **Why it's nice now:** human- or agent-written is *literally irrelevant*.
+> A checked proof is a checked proof. The output carries its own nervous system.
+
+---
+
+## The deep pattern (this is the whole talk in one table)
+
+<div id="who-verifies-viz" class="viz-tall"></div>
+
+<span class="viz-note">click a language — same function, four answers to "is it true?"</span>
+
+| Language | Who verifies correctness |
+|----------|-------------------------|
+| Python | **you** (vibes + tests you forgot to write) |
+| C++ | you, at runtime, via core dumps |
+| Rust | the compiler — deterministic reflex, human or agent, who cares |
+| Lean | the kernel — a judge of done that cannot be bribed or fooled |
+
+> Every step right is one more organ moved **out of the human**
+> and into the body. Same ladder as the whole deck.
+
+---
+
+## What to learn, in what order (the honest path)
+
+1. **Python** — for thinking out loud. Stay here for the lab.
+2. **C++** — once, to earn respect for bytes. Physics will demand it anyway.
+3. **Rust** — when your agents start writing systems code: let the
+   borrow checker be their spine.
+4. **Lean** — when "it passes the tests" stops being a satisfying answer:
+   for the *verifier itself*, verified.
+
+> You don't collect languages. You collect **organs.**
+
+---
+
+## Act 7 · **Ramon Llullus, Prototype Systems Engineer**
 
 ---
 
@@ -590,6 +719,7 @@ ARS GENERALIS concepts × loop × verification        "this program"
 - A **loop** (sense→decide→act→remember) is the first nerve net — the model never changes; the *body* does.
 - Mature agents **cephalize**: brain = judgment, **spinal cord = deterministic code**, reflexes skip the brain entirely.
 - The **lab**: one physics fit, four git tags — `v1-amoeba → v4-cns`. Run v3 twice and watch memory, not the model, close the gap to truth.
+- **Languages are immune systems**: Python verifies nothing, C++ verifies at runtime, Rust's compiler is a spinal cord, Lean's kernel is an unbribeable judge — and none of them care whether a human or an agent typed it.
 - Llull's *Ars generalis* was the first **combinatorial reasoning machine** — it lacked only a body that can sense whether it worked. **That's the thing you're building.**
 
 ---
@@ -610,6 +740,7 @@ a spine made of code, two reflexes, two memories, and a judge it can't bribe.
 
 - **Rebuild one old vibe-prompted session** using the checklist. Time it. Compare token bills.
 - **The lab lives at `/lab/`** on this site — clone the repo, `git checkout v1-amoeba`, and run the four acts. Bring opencode.
+- **Language path:** Rust — *The Rust Programming Language* (free, the book); Lean — *Theorem Proving in Lean 4* (free, Lean community site). Both read beautifully in one focused week each.
 - Llull, primary-ish: *Ars generalis ultima* (English translations exist; the wheels are diagrammed beautifully).
 - Biology grounding: read about **cephalization** and the **C. elegans connectome** — 302 neurons, fully mapped; the simplest animal anyone has ever "read out" completely.
 - Then ask the Llull question: *if you could only keep 9 primitives for your agent, which 9?*

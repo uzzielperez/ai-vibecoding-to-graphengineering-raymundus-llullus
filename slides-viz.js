@@ -505,6 +505,45 @@
     root.appendChild(wrap);
   }
 
+  /* ── 6 · Who verifies ───────────────────────────────────────────────── */
+
+  var LANGS = [
+    { name: "Python", color: "#8a4a3f", who: "you (vibes + tests you forgot to write)",
+      demo: "runs. prints A = 845.6. the wrong weighting is invisible. a satellite died this way." },
+    { name: "C++", color: "#a6652a", who: "you — at runtime, via core dumps",
+      demo: "compiles your mistake at -O2. segfault is runtime philosophy. ROOT awaits." },
+    { name: "Rust", color: "#c98c36", who: "the compiler — deterministic reflex arc, 30 yrs old",
+      demo: "borrow checker refuses data races & dangling refs BEFORE runtime. human or agent: irrelevant." },
+    { name: "Lean", color: "#e8b64c", who: "the kernel — a judge of done that cannot be bribed",
+      demo: "theorem + program, machine-checked together. 'looks right' does not typecheck." }
+  ];
+
+  function initWhoVerifies(section) {
+    var root = section.querySelector("#who-verifies-viz");
+    if (!root || section.dataset.wvInit === "1") return;
+    section.dataset.wvInit = "1";
+
+    var wrap = el("div", "ae-wrap");
+    var bar = el("div", "ae-bar");
+    bar.style.height = "56px";
+    var readout = el("div", "am-readout", "same fit function, four languages — click one: <b>who says it is true?</b>");
+
+    LANGS.forEach(function (L, i) {
+      var seg = el("div", "ae-seg", L.name);
+      seg.style.flexGrow = "1";
+      seg.style.background = L.color;
+      seg.style.cursor = "pointer";
+      seg.addEventListener("click", function () {
+        readout.innerHTML = "<b>" + L.name + "</b> → verified by: <b>" + L.who + "</b><br>" + L.demo;
+      });
+      bar.appendChild(seg);
+    });
+
+    wrap.appendChild(bar);
+    wrap.appendChild(readout);
+    root.appendChild(wrap);
+  }
+
   /* ── Deck glue ───────────────────────────────────────────────────────── */
 
   function onDeckSlide(section) {
@@ -514,6 +553,7 @@
     if (section.querySelector("#agent-loop-viz")) initAgentLoop(section);
     if (section.querySelector("#llull-wheels-viz")) initLlullWheels(section);
     if (section.querySelector("#lab-ladder-viz")) initLabLadder(section);
+    if (section.querySelector("#who-verifies-viz")) initWhoVerifies(section);
   }
 
   Reveal.on("ready", function () {
