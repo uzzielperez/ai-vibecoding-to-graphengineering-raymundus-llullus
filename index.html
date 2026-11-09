@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agents: From Amoeba to Nervous System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reset.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css">
+<style>
+/* ── Root variables — "Llull ink" palette (gold + vermilion on deep ink) ── */
+:root {
+  --bg:        #0a0712;
+  --bg2:       #130d1e;
+  --bg3:       #1c1430;
+  --surface:   #241a3a;
+  --border:    #3a2c58;
+  --accent:    #e8b64c;   /* Llull gold */
+  --accent2:   #e85d4c;   /* vermilion */
+  --accent3:   #7fb4ff;   /* cobalt-light */
+  --accent4:   #5ee9c8;   /* nerve mint */
+  --text:      #f0ebdd;
+  --muted:     #9a8fae;
+  --code-bg:   #0d0916;
+  --glow-gold: rgba(232, 182, 76, 0.10);
+  --glow-red:  rgba(232, 93, 76, 0.07);
+  --font-head: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* ── Base ───────────────────────────────────────────────────────────────── */
+.reveal-viewport {
+  position: relative;
+  background:
+    radial-gradient(120% 80% at 100% 0%, var(--glow-red) 0%, transparent 55%),
+    radial-gradient(90% 70% at 0% 100%, var(--glow-gold) 0%, transparent 50%),
+    linear-gradient(165deg, var(--bg) 0%, #100a1c 45%, var(--bg2) 100%);
+}
+.reveal {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-mono);
+  color: var(--text);
+  font-size: 18px;
+  font-feature-settings: "liga" 1, "calt" 1;
+}
+
+/* Grid + vignette + film grain */
+.reveal-viewport::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(232, 182, 76, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232, 182, 76, 0.025) 1px, transparent 1px),
+    radial-gradient(ellipse 85% 65% at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.55) 100%);
+  background-size: 44px 44px, 44px 44px, 100% 100%;
+}
+.reveal-viewport::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-viewport::after { opacity: 0.03; }
+}
+
+/* ── Slide base ─────────────────────────────────────────────────────────── */
+.reveal .slides section {
+  text-align: left;
+  padding: 0 clamp(36px, 5.5vw, 88px);
+  box-sizing: border-box;
+  height: 100%;
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* ── Deck title ─────────────────────────────────────────────────────────── */
+.reveal .slides section.deck-title {
+  justify-content: flex-end !important;
+  padding-bottom: 56px !important;
+  font-size: 28px;
+  position: relative;
+}
+.reveal .slides section.deck-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 18%;
+  width: 5px;
+  height: min(42%, 280px);
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--accent) 0%, transparent 85%);
+  opacity: 0.85;
+  box-shadow: 0 0 24px rgba(232, 182, 76, 0.25);
+  pointer-events: none;
+}
+.reveal .slides section.deck-title h1 {
+  font-size: 3.0em;
+  line-height: 1.05;
+  margin-bottom: 0.25em;
+  letter-spacing: -0.04em;
+}
+.reveal .slides section.deck-title h1 strong {
+  color: var(--accent);
+  text-shadow: 0 0 40px rgba(232, 182, 76, 0.25);
+}
+.reveal .slides section.deck-title .deck-subtitle {
+  font-size: 1.05em;
+  color: var(--muted);
+  margin: 0 0 6px;
+}
+.reveal .slides section.deck-title .deck-author {
+  font-size: 0.85em;
+  color: var(--accent3);
+  margin: 0;
+  letter-spacing: 0.04em;
+}
+
+/* ── Act bridge slides (single-line "Act N" headers) ────────────────────── */
+.reveal .slides section.act-bridge {
+  justify-content: center !important;
+  text-align: center;
+}
+.reveal .slides section.act-bridge h2 {
+  font-family: var(--font-head);
+  font-size: 2.4em;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+.reveal .slides section.act-bridge h2 strong {
+  color: var(--accent);
+  text-shadow: 0 0 30px rgba(232, 182, 76, 0.25);
+}
+.reveal .slides section.act-bridge h2::after { display: none; }
+.reveal .slides section.act-bridge .act-eyebrow {
+  font-size: 0.6em;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent3);
+  margin-bottom: 14px;
+}
+
+/* ── Typography ─────────────────────────────────────────────────────────── */
+.reveal h1, .reveal h2, .reveal h3 {
+  font-family: var(--font-head);
+  letter-spacing: -0.03em;
+  text-transform: none;
+  color: var(--text);
+}
+.reveal h2 {
+  font-size: 1.5em;
+  font-weight: 800;
+  margin-bottom: 0.55em;
+}
+.reveal h2 strong { color: var(--accent); }
+.reveal h2::after {
+  content: '';
+  display: block;
+  width: 56px;
+  height: 3px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+}
+.reveal h3 { font-size: 1.1em; color: var(--accent3); }
+.reveal p, .reveal li { line-height: 1.5; }
+.reveal strong { color: var(--accent); }
+.reveal em { color: var(--muted); font-style: italic; }
+.reveal a { color: var(--accent3); }
+
+/* ── Lists ──────────────────────────────────────────────────────────────── */
+.reveal ul, .reveal ol { margin-left: 1.1em; }
+.reveal ul li::marker { color: var(--accent); }
+.reveal ol li::marker { color: var(--accent); }
+.reveal li + li { margin-top: 0.35em; }
+
+/* ── Blockquote (key-idea boxes) ────────────────────────────────────────── */
+.reveal blockquote {
+  display: block;
+  width: 100%;
+  margin: 0.7em 0;
+  padding: 0.8em 1.1em;
+  font-style: normal;
+  background: linear-gradient(155deg, rgba(232, 182, 76, 0.07), rgba(36, 26, 58, 0.55));
+  border: 1px solid rgba(232, 182, 76, 0.35);
+  border-left: 4px solid var(--accent);
+  border-radius: 10px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+  color: var(--text);
+}
+.reveal blockquote p { margin: 0; line-height: 1.5; }
+.reveal blockquote p + p { margin-top: 0.5em; }
+
+/* ── Code ───────────────────────────────────────────────────────────────── */
+.reveal code {
+  font-family: var(--font-mono);
+  color: var(--accent4);
+  background: rgba(94, 233, 200, 0.08);
+  padding: 0.08em 0.3em;
+  border-radius: 4px;
+  font-size: 0.88em;
+}
+.reveal pre {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin: 0.7em 0;
+  width: 100%;
+}
+.reveal pre code {
+  display: block;
+  background: var(--code-bg);
+  color: #d8e2f8;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 0.62em;
+  line-height: 1.55;
+  max-height: 60vh;
+  overflow: auto;
+  box-sizing: border-box;
+}
+.reveal pre code .hljs-comment { color: #6f7a99; }
+.reveal pre code .hljs-keyword { color: var(--accent2); }
+.reveal pre code .hljs-string { color: var(--accent); }
+.reveal pre code .hljs-title { color: var(--accent3); }
+
+/* ── Tables ─────────────────────────────────────────────────────────────── */
+.reveal table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0.7em 0;
+  font-size: 0.72em;
+}
+.reveal th {
+  font-family: var(--font-head);
+  color: var(--accent);
+  text-align: left;
+  border-bottom: 2px solid var(--accent);
+  padding: 8px 10px;
+  font-weight: 700;
+}
+.reveal td {
+  border-bottom: 1px solid var(--border);
+  padding: 7px 10px;
+  vertical-align: top;
+}
+.reveal tr:last-child td { border-bottom: none; }
+.reveal tbody tr:nth-child(odd) td { background: rgba(36, 26, 58, 0.35); }
+
+/* ── Checklists ─────────────────────────────────────────────────────────── */
+.reveal ul li input[type="checkbox"] { accent-color: var(--accent); margin-right: 0.4em; }
+
+/* ── Pill slides (blue/red/purple) ──────────────────────────────────────── */
+.reveal .slides section .pill-purple-title { color: #c58aff; }
+
+/* ── Viz containers ─────────────────────────────────────────────────────── */
+.viz-tall { width: 100%; min-height: 380px; margin: 0.4em 0; }
+.viz-note { color: var(--muted); font-size: 0.68em; margin-top: 0.4em; }
+
+/* ── Amoeba viz ─────────────────────────────────────────────────────────── */
+.am-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.am-stage { position: relative; width: 560px; max-width: 100%; }
+.am-svg { width: 100%; display: block; }
+.am-controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
+.am-btn {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.am-btn:hover { border-color: var(--accent); color: var(--accent); }
+.am-btn.am-danger:hover { border-color: var(--accent2); color: var(--accent2); }
+.am-readout {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--muted);
+  min-height: 20px;
+  text-align: center;
+}
+.am-readout b { color: var(--accent); }
+
+/* ── Attention economy viz ──────────────────────────────────────────────── */
+.ae-wrap { display: flex; flex-direction: column; gap: 14px; }
+.ae-bar {
+  display: flex;
+  width: 100%;
+  height: 52px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.ae-seg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #0d0916;
+  font-weight: 700;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: flex-grow .5s ease, opacity .3s;
+}
+.ae-legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+.ae-legend .dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; }
+.ae-slider-row { display: flex; align-items: center; gap: 14px; font-size: 13px; color: var(--muted); }
+.ae-slider-row input[type="range"] { flex: 1; accent-color: var(--accent); }
+.ae-stat { font-family: var(--font-mono); color: var(--accent); min-width: 130px; text-align: right; }
+
+/* ── Agent loop viz ─────────────────────────────────────────────────────── */
+.al-wrap { display: flex; gap: 18px; width: 100%; align-items: stretch; }
+.al-cycle { flex: 0 0 320px; position: relative; }
+.al-cycle svg { width: 100%; display: block; }
+.al-node-label { font-family: var(--font-mono); font-size: 13px; fill: var(--muted); }
+.al-node-label.active { fill: var(--accent); font-weight: 700; }
+.al-ring { fill: none; stroke: var(--border); stroke-width: 2; }
+.al-arc { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset .4s ease; }
+.al-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.al-log {
+  flex: 1;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-y: auto;
+  max-height: 300px;
+}
+.al-log .l-obs  { color: var(--accent3); }
+.al-log .l-plan{ color: var(--accent); }
+.al-log .l-act  { color: var(--accent2); }
+.al-log .l-mem  { color: var(--muted); }
+.al-log .l-done { color: var(--accent4); font-weight: 700; }
+.al-controls { display: flex; gap: 10px; align-items: center; }
+.al-step-badge {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent);
+  border: 1px solid rgba(232, 182, 76, 0.4);
+  border-radius: 999px;
+  padding: 4px 12px;
+}
+
+/* ── Llull wheels viz ───────────────────────────────────────────────────── */
+.lw-wrap { display: flex; gap: 20px; width: 100%; align-items: center; }
+.lw-wheels { flex: 0 0 360px; }
+.lw-wheels svg { width: 100%; display: block; }
+.lw-ring { fill: none; stroke-width: 1.5; }
+.lw-letter { font-family: var(--font-mono); font-size: 13px; font-weight: 700; }
+.lw-panel { flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.lw-question {
+  background: var(--code-bg);
+  border: 1px solid rgba(232, 182, 76, 0.4);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--accent);
+  min-height: 52px;
+}
+.lw-question .q-dim { color: var(--muted); font-size: 12px; display: block; margin-top: 4px; }
+.lw-verdict { font-family: var(--font-mono); font-size: 13px; color: var(--muted); min-height: 40px; line-height: 1.5; }
+.lw-verdict b.yes { color: var(--accent4); }
+.lw-verdict b.no  { color: var(--accent2); }
+
+/* ── Reveal chrome colors ───────────────────────────────────────────────── */
+.reveal .controls { color: var(--accent); }
+.reveal .progress { color: var(--accent); height: 3px; }
+.reveal .slide-number { color: var(--muted); background: transparent; font-family: var(--font-mono); }
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<!-- Deck content: slides.md (injected by script below when served over HTTP). -->
+</div><!-- /slides -->
+</div><!-- /reveal -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/markdown/markdown.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/plugin/highlight/highlight.min.js"></script>
+<script src="slides-viz.js"></script>
+<script>
+// Deck body lives in `slides.md` (not duplicated in this HTML file).
+(() => {
+  const slidesEl = document.querySelector(".slides");
+  if (!slidesEl) return;
+
+  if (window.location.protocol === "file:") {
+    slidesEl.innerHTML = `
+      <section>
+        <h2>Run via HTTP</h2>
+        <p>Open this deck from a local HTTP server (not <code>file://</code>) so markdown can load.</p>
+      </section>
+    `.trim();
+    return;
+  }
+
+  slidesEl.innerHTML = `
+    <section data-markdown="slides.md" data-separator="^---\\s*$"></section>
+  `.trim();
+})();
+
+Reveal.initialize({
+  hash: true,
+  slideNumber: 'c/t',
+  progress: true,
+  transition: 'slide',
+  transitionSpeed: 'fast',
+  backgroundTransition: 'fade',
+  controls: true,
+  center: true,
+  width: 1280,
+  height: 720,
+  margin: 0.08,
+  plugins: [ RevealMarkdown, RevealHighlight ]
+});
+</script>
+</body>
+</html>
