@@ -888,7 +888,9 @@ a spine made of code, two reflexes, two memories, and a judge it can't bribe.
 ## Try it & dig deeper
 
 - **Rebuild one old vibe-prompted session** using the checklist. Time it. Compare token bills.
-- **The lab lives at `/lab/`** on this site — clone the repo, `git checkout v1-amoeba`, and run the four acts. Bring opencode.
+- **The lab lives at `/lab/`** on this site — or clone the tagged repo:
+  `git clone https://github.com/uzzielperez/raymundus-llullus-lab.git`
+  (`git checkout v1-amoeba` and run the four acts). Bring opencode.
 - **Language path:** Rust — *The Rust Programming Language* (free, the book); Lean — *Theorem Proving in Lean 4* (free, Lean community site). Both read beautifully in one focused week each.
 - Llull, primary-ish: *Ars generalis ultima* (English translations exist; the wheels are diagrammed beautifully).
 - Biology grounding: read about **cephalization** and the **C. elegans connectome** — 302 neurons, fully mapped; the simplest animal anyone has ever "read out" completely.
