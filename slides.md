@@ -373,7 +373,7 @@ Same model. Same prompts, roughly. **Different animal.**
 - `σ(E) = A/E²` for e⁺e⁻ → μ⁺μ⁻ — eight measurements, fit **A** (truth: 860 pb·GeV²).
 
 > Same storyline, one exercise: the fit goes from amoeba to CNS
-> in four git tags you can check out and diff.
+> in five git tags you can check out and diff.
 
 ---
 
@@ -381,14 +381,15 @@ Same model. Same prompts, roughly. **Different animal.**
 
 <div id="lab-ladder-viz" class="viz-tall"></div>
 
-<span class="viz-note">click an organism — same file, four git tags; the diff is the lesson</span>
+<span class="viz-note">click an organism — same file, five git tags; the diff is the lesson</span>
 
 ```
-lab/fit_xsec.py          ← one file, four organisms
+lab/fit_xsec.py          ← one file, five organisms
 v1-amoeba    vibe-coded fit, no tests, no memory
 v2-nerve-net handlers with roles, still amnesic
 v3-head      brain (log-space fit) + spine (verify) + reflex + results.json
 v4-cns       loop + judge-of-done + 2 memories + budget
+v5-dreamer   the night shift: replay → lesson → read back → prune → relapse
 ```
 
 Every state is a **git tag**. The history *is* the curriculum:
@@ -834,6 +835,10 @@ level 4   dreamer proposes edits to the dreamer    (recursive — and here
 
 <span class="viz-note">run the night shift — every dream line is a proposal; the spine decides at dawn</span>
 
+> **And it is not a metaphor here:** lab tag `v5-dreamer` runs this —
+> `python3 fit_xsec.py --dream` — replay → lesson → the awake loop reads it back.
+> Prune the lesson after 12 quiet runs and watch the agent **relapse**, then re-learn.
+
 ```
 DREAM 2026-11-09 (nightly, sensors off):
   replay: 41 loops today, 6 failed at verify, 3 were the SAME mistake
@@ -1026,7 +1031,7 @@ Why the Higgs is the *perfect* lab animal:
 
 ---
 
-## The lab, Higgs-flavored (same four tags, new prey)
+## The lab, Higgs-flavored (same tags, new prey)
 
 ```
 v1-amoeba     vibe-fit the Higgs background — no weights, -999 as a real number
@@ -1148,7 +1153,7 @@ ARS GENERALIS concepts × loop × verification        "this program"
 - Prompt-stuffing = **slime mold**: louder, still blob-shaped. Attention is a fixed pie.
 - A **loop** (sense→decide→act→remember) is the first nerve net — the model never changes; the *body* does.
 - Mature agents **cephalize**: brain = judgment, **spinal cord = deterministic code**, reflexes skip the brain entirely.
-- The **lab**: one physics fit, four git tags — `v1-amoeba → v4-cns`. Run v3 twice and watch memory, not the model, close the gap to truth.
+- The **lab**: one physics fit, five git tags — `v1-amoeba → v5-dreamer`. Run v3 twice and watch memory, not the model, close the gap to truth; run `--dream` on v5 and watch the organism re-learn after a prune.
 - **Languages are immune systems**: Python verifies nothing, C++ verifies at runtime, Rust's compiler is a spinal cord, Lean's kernel is an unbribeable judge — and none of them care whether a human or an agent typed it.
 - The **codebase is a habitat**: legible structure, executable skills, small typed tools — and an **LLM-as-judge** (spine checks first, LLM second, author never judges) as its immune system.
 - **Dreaming is the offline loop**: replay → prune → consolidate → simulate → propose. Recursive self-improvement is safe only because every dream is a *diff* that must still pass a spine the dreamer cannot edit.

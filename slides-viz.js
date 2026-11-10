@@ -465,7 +465,8 @@
     { tag: "v1-amoeba",    name: "amoeba",     organs: [],                                   out: "A = 845.6  ·  run twice: identical" },
     { tag: "v2-nerve-net", name: "nerve net",  organs: ["roles"],                            out: "A = 845.6  ·  run twice: identical" },
     { tag: "v3-head",      name: "head",       organs: ["roles", "brain", "spine", "reflex", "memory"], out: "run 1: 841.9 → run 2: 851.3 (+1% closer to 860)" },
-    { tag: "v4-cns",       name: "CNS",        organs: ["roles", "brain", "spine", "reflex", "memory", "loop", "judge", "budget"], out: "run 1: 841.9 → run 2: 851.3 · iters=1/5 · lessons.md grows" }
+    { tag: "v4-cns",       name: "CNS",        organs: ["roles", "brain", "spine", "reflex", "memory", "loop", "judge", "budget"], out: "run 1: 841.9 → run 2: 851.3 · iters=1/5 · lessons.md grows" },
+    { tag: "v5-dreamer",   name: "dreamer",    organs: ["roles", "brain", "spine", "reflex", "memory", "loop", "judge", "budget", "night shift"], out: "3 fails → --dream → lesson → pass iters=1 · prune after 12 quiet runs → RELAPSE → re-learn" }
   ];
 
   function initLabLadder(section) {
@@ -482,7 +483,7 @@
     LAB_STATES.forEach(function (st, i) {
       var seg = el("div", "ae-seg", st.name);
       seg.style.flexGrow = "1";
-      seg.style.background = ["#8a4a3f", "#a6652a", "#c98c36", "#e8b64c"][i];
+      seg.style.background = ["#8a4a3f", "#a6652a", "#c98c36", "#e8b64c", "#5ee9c8"][i];
       seg.style.cursor = "pointer";
       seg.addEventListener("click", function () { select(i); });
       bar.appendChild(seg);
